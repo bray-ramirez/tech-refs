@@ -158,7 +158,7 @@
   var ReactDOM = require('react-dom');
   var FirstComponent = require('./components/[first_component].jsx');
 
-  ReactDOM.render(FirstComponent, document.getElementById('container'));
+  ReactDOM.render(<FirstComponent />, document.getElementById('container'));
   ```
 
 1. Create `index.html` under `public` directory and modify it with the following:
