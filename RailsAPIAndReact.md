@@ -108,7 +108,7 @@
     "name": "something"
     ...
     "scripts": {
-      "devserve": "webpack-dev-server -d --config webpack.development.config.js --content-base public/ --progress --colors --host 0.0.0.0 --port 8080"
+      "devserve": "webpack-dev-server -d --config webpack.config.js --content-base public/ --progress --colors --host 0.0.0.0 --port 8080"
     }
   }
   ```
