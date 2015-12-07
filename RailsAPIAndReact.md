@@ -277,3 +277,10 @@
   ```
 
 1. Changes can be seen in `localhost:8080`
+
+### References
+1. http://www.openmindedinnovations.com/blogs/3-ways-to-integrate-ruby-on-rails-react-flux
+2. http://fancypixel.github.io/blog/2015/01/28/react-plus-flux-backed-by-rails-api/
+3. http://fancypixel.github.io/blog/2015/01/29/react-plus-flux-backed-by-rails-api-part-2/
+4. http://fancypixel.github.io/blog/2015/01/30/react-plus-flux-backed-by-rails-api-part-3/
+5. http://fredguest.com/2015/03/06/building-a-stateless-rails-api-with-react-and-twitter-oauth/
