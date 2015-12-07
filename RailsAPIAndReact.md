@@ -1,12 +1,12 @@
 # Rails API + React
 * Step by step guide in creating a Rails API only application with React JS as front-end
 
-## Prerequisite
-1. Download `Postman` Google Chrome Application to test API Endpoints
-
 ## Rails API
 
-### Set Up
+### Prerequisite
+1. Download `Postman` Google Chrome Application to test API Endpoints
+
+### Guide
 1. Install `rails-api` gem
   * `gem install rails-api`
   
@@ -67,3 +67,213 @@
 2. https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en
 
 ## React
+
+### Prerequisite
+1. Install `Node`
+2. Install `npm`
+
+## Guide
+1. In your `Rails API` application root directory run `npm init`. Supply needed information
+  * Running `npm init` will generate `package.json` in your app's root directory
+  * `package.json` is similar to `Gemfile` in Rails. It will contain packages to build our frontend such as react
+
+1. Create `client` folder in root directory
+
+1. Create our entry point which is `index.jsx` under `client` directory
+
+1. In root directory, run the following:
+  * `npm install webpack --save`
+  * `npm install webpack-dev-server --save`
+
+1. Create `webpack.config.js` in root directory. Enter the following:
+  ```js
+  module.exports = {
+    entry: ['./client/index.jsx'],
+    output: {
+      path: './public',
+      filename: 'bundle.js'
+    },
+    module: {
+      loaders: [
+      ]
+    },
+    plugins: [
+    ]
+  };
+  ```
+
+1. Update `package.json` and add the following under `scripts`:
+  ```json
+  {
+    "name": "something"
+    ...
+    "scripts": {
+      "devserve": "webpack-dev-server -d --config webpack.development.config.js --content-base public/ --progress --colors --host 0.0.0.0 --port 8080"
+    }
+  }
+  ```
+
+1. Run `npm run devserve` in your console
+  * This run up our client server at port `8080`
+
+1. Install `react` package: `npm install react --save`
+
+1. Install `react-dom` package: `npm install react-dom --save`
+
+1. Install `jsx loader` package: `npm install jsx-loader --save-dev`
+
+1. Update `webpack.config.js` to add `jsx-loader` in the `loaders`:
+  ```js
+  module.exports = {
+    entry: ['./client/index.jsx'],
+    ...
+    module: {
+      loaders: [
+        { test: /\.jsx$/, loader: 'jsx-loader' }
+      ]
+    }
+  }
+  ```
+
+1. For our first React component, create `components` directory under `client`
+
+1. Create `[first_component].jsx` under `client/components` directory
+
+1. Modify our first `[first_component].jsx` and add the following:
+  ```js
+  var React = require('react');
+  
+  module.exports = React.createClass({
+    render: function(){
+      return (
+        <div>Hello World!</div>
+      )
+    }
+  });
+  ```
+
+1. Modify our entry point `client/index.jsx` andd add the following:
+  ```js
+  var React = require('react');
+  var ReactDOM = require('react-dom');
+  var FirstComponent = require('./components/[first_component].jsx');
+
+  ReactDOM.render(FirstComponent, document.getElementById('container'));
+  ```
+
+1. Create `index.html` under `public` directory and modify it with the following:
+  ```html
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Sample APP</title>
+    </head>
+    <body>
+      <div id='container'></div>
+      <script type='text/javascript' src='/bundle.js'></script>
+    </body>
+  </html>
+  ```
+
+1. Visit `localhost:8080` and you should see `Hello World!`
+
+1. To connect to our API, let us first install `reqwest`: `npm install reqwest --save`
+
+1. Update `[first_component].jsx` so we can connect to our API
+  ```js
+  var React = require('react');
+  var Reqwest = require('reqwest');
+
+  module.exports = React.createClass({
+    _tasks: function(){
+      var rows = this.state.tasks.map(function(task){
+        return (
+          <tr key={task.id}>
+            <td>{task.id}</td>
+            <td>{task.name}</td>
+            <td>{task.done}</td>
+          </tr>
+        );
+      });
+
+      return rows;
+    },
+
+    _loadTasksFromServer: function(){
+      var _this = this;
+
+      Reqwest({
+        url: 'http://localhost:3000/tasks',
+        type: 'json',
+        content_type: 'application/json',
+        method: 'GET',
+        success: function(response){
+          _this.setState({ tasks: response.tasks });
+        },
+        error: function(error){
+          console.log(error);
+        }
+      });
+    },
+
+    componentDidMount: function(){
+      this._loadTasksFromServer();
+    },
+
+    getInitialState: function(){
+      return {
+        tasks: []
+      }
+    },
+
+    render: function(){
+      return (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this._tasks()}
+          </tbody>
+        </table>
+      );
+    }
+  });
+  ```
+
+1. Update `routes.rb` to add `preflight` requests:
+  ```ruby
+  match '*all', :to => 'application#preflight', :via => [:options]
+  ```
+
+1. Update `ApplicationController` to allow:
+  * cross origin requests
+  * preflight requests
+  
+  ```ruby
+  class ApplicationController < ActionController::API
+    include ActionController::Serialization
+
+    before_action :allow_cross_origin_requests, :if => proc { Rails.env.development? }
+    
+    def preflight
+      render :nothing => true
+    end
+
+    protected
+
+    def allow_cross_origin_requests
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Request-Method'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+      headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+      headers['Access-Control-Max-Age'] = '1728000'
+    end
+  end
+  ```
+
+1. Changes can be seen in `localhost:8080`
