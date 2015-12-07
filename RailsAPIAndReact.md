@@ -61,4 +61,9 @@
   
 1. Restart your server and test your API Endpoint again, you should see the defined attributes only
 
+### References:
+1. https://rubygems.org/gems/rails-api/versions/0.4.0
+2. http://www.rubydoc.info/gems/active_model_serializers
+2. https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en
+
 ## React
