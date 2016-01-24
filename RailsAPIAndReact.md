@@ -120,16 +120,23 @@
 
 1. Install `react-dom` package: `npm install react-dom --save`
 
-1. Install `jsx loader` package: `npm install jsx-loader --save-dev`
+1. Install `babel loader` package: `npm install babel-loader --save-dev`
 
-1. Update `webpack.config.js` to add `jsx-loader` in the `loaders`:
+1. Update `webpack.config.js` to add `babel-loader` in the `loaders`:
   ```js
   module.exports = {
     entry: ['./client/index.jsx'],
     ...
     module: {
       loaders: [
-        { test: /\.jsx$/, loader: 'jsx-loader' }
+        {
+          test: /\.jsx?$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+          query: {
+            presets: ['react']
+          }
+        }
       ]
     }
   }
