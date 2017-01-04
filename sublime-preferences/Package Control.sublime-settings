@@ -1,0 +1,18 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Better CoffeeScript",
+		"Colorsublime",
+		"FileDiffs",
+		"Git",
+		"GitGutter",
+		"Handlebars",
+		"Material Theme",
+		"Origami",
+		"SideBarEnhancements"
+	]
+}
